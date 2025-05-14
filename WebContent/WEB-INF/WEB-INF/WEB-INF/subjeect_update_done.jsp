@@ -1,15 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.sql.*" %>
 <html>
-<head><title>更新完了</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title>ページタイトル</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+<title>更新完了</title></head>
 <body>
 <h2>更新完了</h2>
 <%
     request.setCharacterEncoding("UTF-8");
     int id = Integer.parseInt(request.getParameter("id"));
     String name = request.getParameter("name");
-    int age = Integer.parseInt(request.getParameter("age"));
-    String department = request.getParameter("department");
+    int credit = Integer.parseInt(request.getParameter("credit"));
 
     String url = "jdbc:mysql://localhost:3306/your_db";
     String user = "your_user";
@@ -17,15 +20,14 @@
 
     Class.forName("com.mysql.cj.jdbc.Driver");
     Connection conn = DriverManager.getConnection(url, user, password);
-    PreparedStatement pstmt = conn.prepareStatement("UPDATE students SET name = ?, age = ?, department = ? WHERE id = ?");
+    PreparedStatement pstmt = conn.prepareStatement("UPDATE subjects SET name = ?, credit = ? WHERE id = ?");
     pstmt.setString(1, name);
-    pstmt.setInt(2, age);
-    pstmt.setString(3, department);
-    pstmt.setInt(4, id);
+    pstmt.setInt(2, credit);
+    pstmt.setInt(3, id);
     int result = pstmt.executeUpdate();
 
     if (result > 0) {
-        out.println("学生情報を更新しました。<br>");
+        out.println("科目情報を更新しました。<br>");
     } else {
         out.println("更新に失敗しました。<br>");
     }
@@ -33,6 +35,6 @@
     pstmt.close();
     conn.close();
 %>
-<a href="student_list.jsp">学生一覧に戻る</a>
+<a href="subject_list.jsp">科目一覧に戻る</a>
 </body>
 </html>

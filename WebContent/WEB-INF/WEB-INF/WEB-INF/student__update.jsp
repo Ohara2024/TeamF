@@ -1,7 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.sql.*" %>
 <html>
-<head><title>学生情報の編集</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title>ページタイトル</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+<title>学生情報の編集</title></head>
 <body>
 <h2>学生情報の編集</h2>
 <%
