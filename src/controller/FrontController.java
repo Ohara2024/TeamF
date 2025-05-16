@@ -58,6 +58,7 @@ public class FrontController extends HttpServlet {
         if (view != null) {
             if (view.startsWith("redirect:")) {
                 // リダイレクトの場合
+                // "redirect:" プレフィックスを取り除いたパスにリダイレクト
                 response.sendRedirect(request.getContextPath() + view.substring("redirect:".length()));
             } else {
                 // フォワードの場合
@@ -105,6 +106,7 @@ public class FrontController extends HttpServlet {
          if (view != null) {
             if (view.startsWith("redirect:")) {
                 // リダイレクトの場合
+                // "redirect:" プレフィックスを取り除いたパスにリダイレクト
                 response.sendRedirect(request.getContextPath() + view.substring("redirect:".length()));
             } else {
                 // フォワードの場合
