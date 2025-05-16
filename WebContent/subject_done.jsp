@@ -1,37 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%-- ヘッダーのインクルード --%>
+<%@ include file="header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>登録完了 - 得点管理システム</title>
-<style>
-    /* シンプルなレイアウトのためのCSS */
-    body { margin: 0; font-family: sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
-    .content-area { display: flex; flex: 1; } /* ヘッダーとフッターの間を flexbox でレイアウト */
-    .main-content { flex: 1; padding: 20px; } /* メインコンテンツが領域を埋めるように */
-</style>
+<title>登録完了</title>
+<%-- 必要であればここにCSSを追加 --%>
 </head>
 <body>
 
-    <%-- ヘッダーのインクルードディレクティブ (ファイル名は header.jsp に変更) --%>
-    <%@ include file="/header.jsp" %>
+    <%-- メインコンテンツのラッパー（任意） --%>
+    <div style="padding: 20px;">
 
-    <div class="content-area">
-        <%-- メニューのインクルード (ファイル名は _menu.jspf のままを想定) --%>
-        <%@ include file="/menu.jsp" %>
+        <h1>科目登録完了</h1>
 
-        <div class="main-content">
-            <h2>登録完了</h2>
-            <p>科目の登録が完了しました。</p>
-            <%-- 科目一覧画面へのリンク（仮） --%>
-            <p><a href="<%= request.getContextPath() %>/subject/list">科目一覧に戻る</a></p>
-            <%-- メニューに戻るリンク --%>
-             <p><a href="<%= request.getContextPath() %>/menu.jsp">メニューに戻る</a></p>
-        </div>
-    </div>
+        <p>科目の登録が完了しました。</p>
 
-    <%-- フッターのインクルードディレクティブ (ファイル名は footer.jsp に変更) --%>
-    <%@ include file="/footer.jsp" %>
+        <%-- 画面設計書_科目登録完了.csv に戻るボタン（リンク）の指示がないため、一覧画面へ遷移するリンクを設置 --%>
+        <p><a href="SubjectList">科目管理一覧へ戻る</a></p> <%-- 科目一覧サーブレット/JSPのパスに修正 --%>
+
+    </div><%-- /メインコンテンツラッパー --%>
+
+    <%-- フッターのインクルード --%>
+    <%@ include file="footer.jsp" %>
 
 </body>
 </html>

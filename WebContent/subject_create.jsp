@@ -1,69 +1,63 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%
-    // SubjectCreateExecuteActionからフォワードされた場合に、
-    // リクエスト属性に設定されたエラーメッセージや入力値を取得します。
-    String error = (String) request.getAttribute("error");
-    String cd = (String) request.getAttribute("cd");
-    String name = (String) request.getAttribute("name");
-
-    if (cd == null) {
-        cd = "";
-    }
-    if (name == null) {
-        name = "";
-    }
-%>
+<%@ page import="model.Subject" %>
+<%@ page import="java.util.List" %>
+<%-- ヘッダーのインクルード --%>
+<%@ include file="header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>科目登録 - 得点管理システム</title> <%-- タイトルを修正 --%>
-<style>
-    /* シンプルなレイアウトのためのCSS */
-    body { margin: 0; font-family: sans-serif; display: flex; flex-direction: column; min-height: 100vh; }
-    .content-area { display: flex; flex: 1; } /* ヘッダーとフッターの間を flexbox でレイアウト */
-    .main-content { flex: 1; padding: 20px; } /* メインコンテンツが領域を埋めるように */
-</style>
+<title>科目登録</title>
+<%-- 必要であればここにCSSを追加 --%>
 </head>
 <body>
 
-    <%-- ヘッダーのインクルード --%>
-    <%@ include file="/header.jsp" %>
+    <%-- メインコンテンツのラッパー（任意） --%>
+    <div style="padding: 20px;">
 
-    <div class="content-area">
-        <%-- メニューのインクルード --%>
-        <%@ include file="/menu.jsp" %>
+        <h1>科目登録</h1>
 
-        <div class="main-content">
-            <h2>科目情報登録</h2> <%-- 画面タイトル --%>
+        <%
+            // エラーメッセージ表示（エラー画面からフォワードされてきた場合）
+            List<String> errors = (List<String>) request.getAttribute("errors");
+            if (errors != null && !errors.isEmpty()) {
+        %>
+            <div style="color: red;">
+                <p>エラー:</p>
+                <ul>
+                    <% for (String error : errors) { %>
+                        <li><%= error %></li>
+                    <% } %>
+                </ul>
+            </div>
+        <%
+            }
+        %>
 
-            <%-- エラーメッセージがあれば表示 --%>
-            <% if (error != null) { %>
-                <p style="color: red;"><%= error %></p>
-            <% } %>
+        <form action="SubjectCreate" method="post"> <%-- サーブレットのマッピング名に合わせる --%>
 
-            <%-- 科目登録フォーム --%>
-            <form action="<%= request.getContextPath() %>/subject/create" method="post">
-                <div style="margin-bottom: 10px;">
-                    <label for="cd" style="display: inline-block; width: 100px;">科目コード:</label> <%-- ラベル幅を調整 --%>
-                    <input type="text" id="cd" name="cd" value="<%= cd %>" style="padding: 5px;">
-                </div>
-                <div style="margin-bottom: 10px;">
-                    <label for="name" style="display: inline-block; width: 100px;">科目名:</label> <%-- ラベル幅を調整 --%>
-                    <input type="text" id="name" name="name" value="<%= name %>" style="padding: 5px;">
-                </div>
-                <div style="margin-top: 15px;">
-                    <button type="submit" style="padding: 8px 15px;">登録</button>
-                    <%-- 「戻る」リンク。前の画面（科目一覧など）に戻る想定 --%>
-                    <%-- リンク先は必要に応じてFrontController経由などに修正してください --%>
-                    <a href="<%= request.getContextPath() %>/subject/list" style="margin-left: 15px;">戻る</a>
-                </div>
-            </form>
-        </div>
-    </div>
+            <%-- 画面設計書によると、学校コードはログイン情報から取得し、表示のみ --%>
+            <p>学校コード: <%= request.getAttribute("schoolCd") != null ? request.getAttribute("schoolCd") : "取得できませんでした" %></p>
+
+            <p>科目コード:
+                <input type="text" name="subjectCd" value="<%= request.getAttribute("subject") != null ? ((Subject)request.getAttribute("subject")).getCd() : "" %>" maxlength="3" required>
+                 (半角3文字)
+            </p>
+            <p>科目名:
+                <input type="text" name="subjectName" value="<%= request.getAttribute("subject") != null ? ((Subject)request.getAttribute("subject")).getName() : "" %>" maxlength="20" required>
+                 (20文字以内)
+            </p>
+
+            <button type="submit">登録</button>
+            <%-- キャンセルボタンは科目管理一覧画面へのリンク --%>
+            <button type="button" onclick="location.href='SubjectList'">キャンセル</button> <%-- 科目一覧サーブレット/JSPのパスに修正 --%>
+
+        </form>
+
+    </div><%-- /メインコンテンツラッパー --%>
 
     <%-- フッターのインクルード --%>
-    <%@ include file="/footer.jsp" %>
+    <%@ include file="footer.jsp" %>
 
 </body>
 </html>
