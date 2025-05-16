@@ -54,18 +54,7 @@ public class StudentDao extends Dao {
 				student = null;
 			}
 		} catch (Exception e) {
-			throw e;
-		} finally {
-			// プリペアードステートメントを閉じる
-			if (statement != null) {
-				try {
-					statement.close();
-				} catch (SQLException sqle) {
-					throw sqle;
-				}
-			}
-			// コネクションを閉じる
-			if (connection != null) {
+			Ation != null) {
 				try {
 					connection.close();
 				} catch (SQLException sqle) {
