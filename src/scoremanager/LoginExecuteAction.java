@@ -25,7 +25,7 @@ public class LoginExecuteAction {
                 teacher.setAuthenticated(true); // 認証済みフラグを設定
                 session.setAttribute("teacherName", teacher.getName());
                 session.setAttribute("teacher", teacher);
-                req.getRequestDispatcher("/menu.jsp").forward(req, resp);
+                req.getRequestDispatcher("main/menu.jsp").forward(req, resp);
             } else {
                 req.setAttribute("error", "IDまたはパスワードが正しくありません。");
                 req.getRequestDispatcher("main/login.jsp").forward(req, resp);
