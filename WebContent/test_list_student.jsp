@@ -1,7 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="/WEB-INF/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/struts-logic.tld" prefix="logic" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
 <html>
@@ -9,45 +7,39 @@
     <title>学生別成績一覧</title>
 </head>
 <body>
-    <h1>学生別成績一覧</h1>
+    <h2>学生別成績一覧</h2>
 
-    <logic:messagesPresent key="errorMessage">
-        <div style="color:red;">
-            <html:errors key="errorMessage"/>
-        </div>
-    </logic:messagesPresent>
+    <c:if test="${not empty errorMessage}">
+        <p style="color:red;">${errorMessage}</p>
+    </c:if>
 
-    <html:form action="/TestListStudent">
-        学生番号: <html:text property="studentId"/>
-        <html:submit value="検索"/>
-    </html:form>
+    <c:if test="${not empty student}">
+        <h3>学生情報</h3>
+        <p>学生番号: ${student.no}</p>
+        <p>氏名: ${student.name}</p>
+        <p>学校名: ${student.school.name}</p>
 
-    <logic:present name="student">
-        <h2><%= ((bean.Student)request.getAttribute("student")).getStudentName() %> さんの成績</h2>
-        <p>学年: <%= ((bean.Student)request.getAttribute("student")).getClassNum().getSchool().getSchoolId() %>年
-           クラス: <%= ((bean.Student)request.getAttribute("student")).getClassNum().getClassName() %></p>
-
-        <logic:present name="testList">
-            <table border="1">
-                <thead>
+        <h3>成績一覧</h3>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>科目名</th>
+                    <th>回数</th>
+                    <th>得点</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="test" items="${testList}">
                     <tr>
-                        <th>科目名</th>
-                        <th>得点</th>
+                        <td>${test.subject.name}</td>
+                        <td>${test.no}</td>
+                        <td>${test.point}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    <logic:iterate id="test" name="testList">
-                        <tr>
-                            <td><%= ((bean.Test)test).getSubject().getSubjectName() %></td>
-                            <td><%= ((bean.Test)test).getScore() %></td>
-                        </tr>
-                    </logic:iterate>
-                </tbody>
-            </table>
-        </logic:present>
-        <logic:notPresent name="testList">
-            <p>成績データはありません。</p>
-        </logic:notPresent>
-    </logic:present>
+                </c:forEach>
+            </tbody>
+        </table>
+    </c:if>
+
+    <a href="index.html">戻る</a>
 </body>
 </html>
