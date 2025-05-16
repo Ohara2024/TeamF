@@ -2,15 +2,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>ログイン</title>
 </head>
 <body>
     <h2>ログイン</h2>
-    <form action="FrontController" method="post">
+    <form action="/TeamF/FrontController" method="post">
         <input type="hidden" name="action" value="executeLogin">
-        <div>ID: <input type="text" name="id"></div>
-        <div>パスワード: <input type="password" name="password"></div>
-        <div><input type="submit" value="ログイン"></div>
+        ID: <input type="text" name="id"><br>
+        パスワード: <input type="password" name="password"><br>
+        <input type="submit" value="ログイン">
     </form>
     <% if (request.getAttribute("error") != null) { %>
         <p style="color:red;"><%= request.getAttribute("error") %></p>
