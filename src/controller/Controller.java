@@ -16,45 +16,51 @@ import javax.servlet.http.HttpServletResponse;
 public class Controller extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+    // DB接続情報はここにまとめておくと分かりやすいです（実務では外部設定ファイルに切り出すのが望ましい）
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/your_db?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8";
+    private static final String DB_USER = "your_user";
+    private static final String DB_PASSWORD = "your_password";
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 文字コード設定
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+
         PrintWriter out = response.getWriter();
 
-        int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        int age = Integer.parseInt(request.getParameter("age"));
-        String department = request.getParameter("department");
-
-        String url = "jdbc:mysql://localhost:3306/your_db";
-        String user = "your_user";
-        String password = "your_password";
-
         try {
+            // パラメータ取得（数値のパースは例外処理しておくのが安全）
+            int id = Integer.parseInt(request.getParameter("id"));
+            String name = request.getParameter("name");
+            int age = Integer.parseInt(request.getParameter("age"));
+            String department = request.getParameter("department");
+
+            // JDBCドライバ読み込み
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(url, user, password);
-            PreparedStatement pstmt = conn.prepareStatement(
-                "UPDATE students SET name = ?, age = ?, department = ? WHERE id = ?"
-            );
 
-            pstmt.setString(1, name);
-            pstmt.setInt(2, age);
-            pstmt.setString(3, department);
-            pstmt.setInt(4, id);
+            // DB接続
+            try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+                 PreparedStatement pstmt = conn.prepareStatement(
+                    "UPDATE students SET name = ?, age = ?, department = ? WHERE id = ?")) {
 
-            int result = pstmt.executeUpdate();
-            if (result > 0) {
-                out.println("<h2>学生情報を更新しました。</h2>");
-            } else {
-                out.println("<h2>更新に失敗しました。</h2>");
+                pstmt.setString(1, name);
+                pstmt.setInt(2, age);
+                pstmt.setString(3, department);
+                pstmt.setInt(4, id);
+
+                int updated = pstmt.executeUpdate();
+
+                if (updated > 0) {
+                    out.println("<h2>学生情報を更新しました。</h2>");
+                } else {
+                    out.println("<h2>更新に失敗しました。IDが存在しない可能性があります。</h2>");
+                }
             }
 
-            pstmt.close();
-            conn.close();
+        } catch (NumberFormatException e) {
+            out.println("<h2>IDや年齢は数値で入力してください。</h2>");
         } catch (Exception e) {
-            out.println("<h2>エラーが発生しました：" + e.getMessage() + "</h2>");
+            out.println("<h2>エラーが発生しました: " + e.getMessage() + "</h2>");
             e.printStackTrace(out);
         }
 
