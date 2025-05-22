@@ -4,12 +4,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import tool.Action;
+// import dao.SubjectDAO; // 必要に応じて追加
+// import bean.Subject;    // 必要に応じて追加
 
 public class SubjectUpdateAction implements Action {
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @Override
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));
-        // データベースから科目情報を取得してリクエスト属性に設定する処理（省略）
+
+        // 科目情報をDBから取得（例）
+        // Subject subject = SubjectDAO.findById(id);
         // request.setAttribute("subject", subject);
-        return "subject_update.jsp";
+
+        // 編集画面にフォワード
+        request.getRequestDispatcher("WEB-INF/views/subject_update.jsp").forward(request, response);
     }
 }

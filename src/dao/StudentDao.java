@@ -334,4 +334,24 @@ public class StudentDao extends Dao {
 			return false;
 		}
 	}
+
+	public static Student findById(int id) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public static void update1(int id, String name, String grade, String email) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	public static void update(int id, String name, String grade, String email) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	public List<Student> findAll() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
 }

@@ -230,4 +230,9 @@ public class SubjectDao extends Dao {
 			return false;
 		}
 	}
+
+	public static void update(int id, String name, int credit, String teacher) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
 }

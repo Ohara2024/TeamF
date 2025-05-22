@@ -9,7 +9,7 @@ import tool.Action;
 public class DefaultAction implements Action {
 
 	@Override
-	public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 	    if (request == null) {
 	        System.out.println("request is null!");
 	    } else {
@@ -17,7 +17,7 @@ public class DefaultAction implements Action {
 	    }
 
 	    request.getRequestDispatcher("WEB-INF/views/index.jsp").forward(request, response);
-	    return null;
+
 	}
 
  }

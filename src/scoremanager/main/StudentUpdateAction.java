@@ -3,16 +3,19 @@ package scoremanager.main;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import bean.Student;
+import dao.StudentDao; // DAOパッケージのimportが必要
 import tool.Action;
 
 public class StudentUpdateAction implements Action {
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         int id = Integer.parseInt(request.getParameter("id"));
 
-        // データベースから学生情報を取得（例: SELECT * FROM students WHERE id = ?）
-        // Student student = StudentDAO.findById(id); // DAO例
-        // request.setAttribute("student", student);
+        // 学生情報をDBから取得
+        Student student = StudentDao.findById(id);
+        request.setAttribute("student", student);
 
-        return "student_update.jsp"; // 編集画面に遷移
+        // 編集画面に遷移
+        request.getRequestDispatcher("WEB-INF/views/student_update.jsp").forward(request, response);
     }
 }

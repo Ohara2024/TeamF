@@ -5,22 +5,53 @@
                              http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-  <display-name>ScoreManager</display-name>
+    <!-- アプリケーションのルート設定 -->
+    <display-name>TeamF</display-name>
 
-  <!-- studentUpdate.jspを呼ぶための設定 -->
-  <servlet>
-    <servlet-name>studentUpdate</servlet-name>
-    <jsp-file>/student_update.jsp</jsp-file>
-  </servlet>
+    <!-- サーブレットの設定 -->
+    <servlet>
+        <servlet-name>StudentListAction</servlet-name>
+        <servlet-class>servlet.StudentListAction</servlet-class>
+    </servlet>
 
-  <servlet-mapping>
-    <servlet-name>studentUpdate</servlet-name>
-    <url-pattern>/studentUpdate</url-pattern>
-  </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StudentListAction</servlet-name>
+        <url-pattern>/StudentListAction</url-pattern>
+    </servlet-mapping>
 
-  <!-- welcome-fileを設定しておくと便利 -->
-  <welcome-file-list>
-    <welcome-file>index.jsp</welcome-file>
-  </welcome-file-list>
+    <!-- その他サーブレットを追加する場合の例
+    <servlet>
+        <servlet-name>AnotherServlet</servlet-name>
+        <servlet-class>servlet.AnotherServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AnotherServlet</servlet-name>
+        <url-pattern>/AnotherServlet</url-pattern>
+    </servlet-mapping>
+    -->
+
+    <!-- 文字エンコーディングフィルター（任意） -->
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>ignore</param-name>
+            <param-value>false</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- ウェルカムページ -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
 
 </web-app>
