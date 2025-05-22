@@ -40,7 +40,7 @@
         label {
             width: 120px;
             font-weight: bold;
-            color: #ff6b81;
+            color: #555;
             font-size: 14px;
         }
         input[type="text"], input[type="number"] {
@@ -54,7 +54,7 @@
         }
         input[type="text"]:focus, input[type="number"]:focus {
             border-color: #ff6b81;
-            box-shadow: 0 0 8px rgba(255, 107, 129, 0.3);
+            box-shadow: 0 0 5px rgba(255, 107, 129, 0.5);
             outline: none;
         }
         input[type="checkbox"] {
@@ -85,18 +85,14 @@
         a {
             display: block;
             text-align: center;
-            padding: 10px;
-            background-color: #d1c4e9;
-            color: #fff;
+            color: #ff6b81;
             font-size: 14px;
             margin-top: 20px;
             text-decoration: none;
-            border-radius: 8px;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: text-decoration 0.3s;
         }
         a:hover {
-            background-color: #ffb6c1;
-            transform: scale(1.05);
+            text-decoration: underline;
         }
         @media (max-width: 600px) {
             .container {
@@ -218,7 +214,7 @@
                     stmt.executeUpdate();
 
                     // 成功したら完了画面にリダイレクト
-                    response.sendRedirect(request.getContextPath() + "/main/student_create_done.jsp");
+                    response.sendRedirect(request.getContextPath() + "/scoremanager/main/student_create_done.jsp");
                     return;
                 } catch (ClassNotFoundException | SQLException e) {
                     error = "登録エラー: " + e.getMessage();

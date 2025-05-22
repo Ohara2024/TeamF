@@ -71,7 +71,7 @@
 <body>
     <div class="container">
         <h1>登録完了</h1>
-        <p>学生登録が完了しました。</p>
+        <p>学生登録が完了されました。</p>
         <a href="<%=request.getContextPath()%>/scoremanager/main/student_list.jsp">学生一覧に戻る</a>
     </div>
 </body>
