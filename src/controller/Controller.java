@@ -17,9 +17,9 @@ public class Controller extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     // DB接続情報はここにまとめておくと分かりやすいです（実務では外部設定ファイルに切り出すのが望ましい）
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/your_db?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8";
-    private static final String DB_USER = "your_user";
-    private static final String DB_PASSWORD = "your_password";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/student_db?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "password";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // 文字コード設定
