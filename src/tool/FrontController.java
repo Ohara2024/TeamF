@@ -3,49 +3,57 @@ package tool;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import scoremanager.StudentCreateAction;
-import scoremanager.StudentCreateExecuteAction;
-import scoremanager.StudentListAction;
+@WebServlet(urlPatterns = { "*.action" })
 
 public class FrontController extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
-        processRequest(req, res);
-    }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
-        processRequest(req, res);
-    }
+	@Override
 
-    private void processRequest(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
-        String path = req.getServletPath();
-        Action action = null;
+	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-        if (path.equals("/student/list.action")) {
-            action = new StudentListAction();
-        } else if (path.equals("/student/create.action")) {
-            action = new StudentCreateAction();
-        } else if (path.equals("/student/create/execute.action")) {
-            action = new StudentCreateExecuteAction();
-        }
+		try {
 
-        try {
-            if (action != null) {
-                action.execute(req, res);
-            } else {
-                res.sendError(HttpServletResponse.SC_NOT_FOUND);
-            }
-        } catch (Exception e) {
-            res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            e.printStackTrace(); // ログ出力に置き換え推奨
-        }
-    }
+			// パスを取得
+
+			String path = req.getServletPath().substring(1);
+
+			// ファイル名を取得しクラス名に変換
+
+			String name = path.replace(".a", "A").replace('/', '.');
+
+			// アクションクラスのインスタンスを返却
+
+			Action action = (Action) Class.forName(name).getDeclaredConstructor().newInstance();
+
+			// 遷移先URLを取得
+
+			action.execute(req, res);
+
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+			// エラーページへリダイレクト
+
+			req.getRequestDispatcher("/error.jsp").forward(req, res);
+
+		}
+
+	}
+
+	@Override
+
+	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+
+		doGet(req,res);
+
+	}
+
 }
+
