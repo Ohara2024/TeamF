@@ -55,4 +55,14 @@ public class StudentDao {
             pstmt.executeUpdate();
         }
     }
+
+	public static Student findById(int id) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public static void update(int id, String name, String grade, String email) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
 }
