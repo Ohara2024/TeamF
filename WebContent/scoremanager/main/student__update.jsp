@@ -9,19 +9,37 @@
 <body>
 <h2>学生情報の編集</h2>
 <%
-    int id = Integer.parseInt(request.getParameter("id"));
-String url = "jdbc:mysql://localhost:8080/your_db";
+    String idStr = request.getParameter("id");
+    if (idStr == null || idStr.isEmpty()) {
+%>
+    <p>学生IDが指定されていません。</p>
+<%
+    } else {
+        int id = 0;
+        try {
+            id = Integer.parseInt(idStr);
+        } catch (NumberFormatException e) {
+%>
+    <p>無効な学生IDです。</p>
+<%
+        }
 
-    String user = "root";
-    String password = "password123";
+        String url = "jdbc:mysql://localhost:3306/your_db?serverTimezone=UTC";
+        String user = "root";
+        String password = "password123";
 
-    Class.forName("com.mysql.cj.jdbc.Driver");
-    Connection conn = DriverManager.getConnection(url, user, password);
-    PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM students WHERE id = ?");
-    pstmt.setInt(1, id);
-    ResultSet rs = pstmt.executeQuery();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
-    if (rs.next()) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(url, user, password);
+            pstmt = conn.prepareStatement("SELECT * FROM students WHERE id = ?");
+            pstmt.setInt(1, id);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
 %>
     <form action="student_update_done.jsp" method="post">
         <input type="hidden" name="id" value="<%= id %>">
@@ -31,14 +49,21 @@ String url = "jdbc:mysql://localhost:8080/your_db";
         <input type="submit" value="更新">
     </form>
 <%
-    } else {
+            } else {
 %>
     <p>該当する学生が見つかりませんでした。</p>
 <%
+            }
+        } catch(Exception e) {
+%>
+    <p>データベース接続エラー: <%= e.getMessage() %></p>
+<%
+        } finally {
+            try { if(rs != null) rs.close(); } catch(Exception e) {}
+            try { if(pstmt != null) pstmt.close(); } catch(Exception e) {}
+            try { if(conn != null) conn.close(); } catch(Exception e) {}
+        }
     }
-    rs.close();
-    pstmt.close();
-    conn.close();
 %>
 </body>
 </html>

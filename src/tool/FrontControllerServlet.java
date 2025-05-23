@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import scoremanager.StudentListAction;
 import scoremanager.StudentUpdateAction;
 
-@WebServlet("*.action")
+@WebServlet("*.action")  // URLパターンの指定（例: *.action）
 public class FrontControllerServlet extends HttpServlet {
 
     @Override
@@ -29,18 +29,19 @@ public class FrontControllerServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String uri = request.getRequestURI();
+        String uri = request.getRequestURI(); // 例: /TeamF/StudentUpdate.action
         String actionName = uri.substring(uri.lastIndexOf("/") + 1);
 
         Action action = null;
 
         switch (actionName) {
             case "StudentListAction.action":
-                action = (Action) new StudentListAction();
+                action = new StudentListAction();
                 break;
             case "StudentUpdate.action":
                 action = new StudentUpdateAction();
                 break;
+            // 他のActionもここに追加可能
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 return;
