@@ -11,25 +11,13 @@
     <!-- サーブレットの設定 -->
     <servlet>
         <servlet-name>StudentListAction</servlet-name>
-        <servlet-class>servlet.StudentListAction</servlet-class>
+        <servlet-class>scoremanager.StudentListAction</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>StudentListAction</servlet-name>
         <url-pattern>/StudentListAction</url-pattern>
     </servlet-mapping>
-
-    <!-- その他サーブレットを追加する場合の例
-    <servlet>
-        <servlet-name>AnotherServlet</servlet-name>
-        <servlet-class>servlet.AnotherServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>AnotherServlet</servlet-name>
-        <url-pattern>/AnotherServlet</url-pattern>
-    </servlet-mapping>
-    -->
 
     <!-- 文字エンコーディングフィルター（任意） -->
     <filter>
