@@ -12,10 +12,14 @@
         <servlet-class>tool.FrontController</servlet-class>
     </servlet>
 
-    <servlet-mapping>
-        <servlet-name>FrontController</servlet-name>
-        <url-pattern>/FrontController</url-pattern>
-    </servlet-mapping>
+<servlet>
+    <servlet-name>StudentListServlet</servlet-name>
+    <servlet-class>scoremanager.StudentListServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>StudentListServlet</servlet-name>
+    <url-pattern>/StudentListServlet</url-pattern>
+</servlet-mapping>
 
     <!-- 必要なら文字コードフィルターや他の設定 -->
 

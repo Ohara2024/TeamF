@@ -1,26 +1,25 @@
 package scoremanager.main;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
-import scoremanager.main. StudentListAction;
+import bean.Student;
+import dao.StudentDao;
 
 @WebServlet("/studentList")
 public class StudentListServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-    // StudentListActionのインスタンスを作成
-    private StudentListAction action = new StudentListAction();
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            // Actionのexecuteメソッドを呼び出す
-            action.execute(request, response);
+            StudentDao dao = new StudentDao();
+            List<Student> students = dao.findAll();
+            request.setAttribute("students", students);
+            request.getRequestDispatcher("/scoremanager/main/student_list.jsp").forward(request, response);
         } catch (Exception e) {
             throw new ServletException(e);
         }

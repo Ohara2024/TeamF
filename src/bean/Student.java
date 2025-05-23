@@ -3,6 +3,14 @@ package bean;
 import java.io.Serializable;
 
 public class Student implements Serializable {
+	private String schoolCd;
+
+	public String getSchoolCd() {
+	    return schoolCd;
+	}
+	public String getSchoolCd1() {
+	    return schoolCd;
+	}
 
 	/**
 	 * 学生番号：String
@@ -83,6 +91,9 @@ public class Student implements Serializable {
 
 	public void setSchool(School school) {
 		this.school = school;
+
+		}
+
 	}
 
-}
+
