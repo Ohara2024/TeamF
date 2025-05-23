@@ -21,7 +21,15 @@ public class FrontController extends HttpServlet {
             actionName = "Default"; // 例: DefaultActionを使う
         }
 
-        String className = "scoremanager.main." + actionName + "Action";
+        // actionNameによってパッケージ名を変える例
+        String className;
+        if ("StudentList".equals(actionName)) {
+            // scoremanagerパッケージのアクションを呼び出す場合
+            className = "scoremanager." + actionName + "Action";
+        } else {
+            // デフォルトはscoremanager.mainパッケージのアクションを呼ぶ
+            className = "scoremanager.main." + actionName + "Action";
+        }
 
         try {
             Class<?> actionClass = Class.forName(className);
