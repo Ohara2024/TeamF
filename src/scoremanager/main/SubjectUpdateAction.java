@@ -1,11 +1,9 @@
-package scoremanager;
+package scoremanager.main;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import tool.Action;
-// import dao.SubjectDAO; // 必要に応じて追加
-// import bean.Subject;    // 必要に応じて追加
 
 public class SubjectUpdateAction implements Action {
     @Override
