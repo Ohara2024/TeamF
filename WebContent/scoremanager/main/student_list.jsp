@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.util.List" %>
+<%@ page import="bean.Student" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -111,61 +112,40 @@
     <div class="container">
         <h1>学生一覧</h1>
         <%
-            Connection conn = null;
-            PreparedStatement stmt = null;
-            ResultSet rs = null;
-            String error = null;
-
-            try {
-                Class.forName("org.h2.Driver");
-                conn = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/exam", "sa", "");
-                String sql = "SELECT NO, NAME, ENT_YEAR, CLASS_NUM, IS_ATTEND, SCHOOL_CD FROM STUDENT ORDER BY CLASS_NUM, NO";
-                stmt = conn.prepareStatement(sql);
-                rs = stmt.executeQuery();
+            List<Student> students = (List<Student>) request.getAttribute("students");
+            if (students == null || students.isEmpty()) {
         %>
-        <table>
-            <tr>
-                <th>学生番号</th>
-                <th>学生名</th>
-                <th>入学年</th>
-                <th>クラス</th>
-                <th>在籍状況</th>
-                <th>学校コード</th>
-            </tr>
-            <%
-                while (rs.next()) {
-                    String no = rs.getString("NO");
-                    String name = rs.getString("NAME");
-                    int entYear = rs.getInt("ENT_YEAR");
-                    String classNum = rs.getString("CLASS_NUM");
-                    boolean isAttend = rs.getBoolean("IS_ATTEND");
-                    String schoolCd = rs.getString("SCHOOL_CD");
-            %>
-            <tr>
-                <td><%= no %></td>
-                <td><%= name %></td>
-                <td><%= entYear %></td>
-                <td><%= classNum %></td>
-                <td class="<%= isAttend ? "status-attend" : "status-absent" %>">
-                    <%= isAttend ? "在籍" : "退学" %>
-                </td>
-                <td><%= schoolCd %></td>
-            </tr>
-            <% } %>
-        </table>
+            <p>学生データがありません。</p>
         <%
-            } catch (ClassNotFoundException | SQLException e) {
-                error = "エラー: " + e.getMessage();
-            } finally {
-                if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
-                if (stmt != null) try { stmt.close(); } catch (SQLException ignored) {}
-                if (conn != null) try { conn.close(); } catch (SQLException ignored) {}
+            } else {
+        %>
+            <table>
+                <tr>
+                    <th>学生番号</th>
+                    <th>名前</th>
+                    <th>入学年度</th>
+                    <th>クラス</th>
+                    <th>在学状況</th>
+                </tr>
+                <%
+                    for (Student s : students) {
+                %>
+                <tr>
+                    <td><%= s.getNo() %></td>
+                    <td><%= s.getName() %></td>
+                    <td><%= s.getEntYear() %></td>
+                    <td><%= s.getClassNum() %></td>
+                    <td class="<%= s.isAttend() ? "status-attend" : "status-absent" %>">
+                        <%= s.isAttend() ? "在学中" : "退学済" %>
+                    </td>
+                </tr>
+                <%
+                    }
+                %>
+            </table>
+        <%
             }
         %>
-        <p><a href="<%=request.getContextPath()%>/scoremanager/main/student_create.jsp">新規登録</a></p>
-        <% if (error != null) { %>
-            <p class="error"><%= error %></p>
-        <% } %>
     </div>
 </body>
 </html>
