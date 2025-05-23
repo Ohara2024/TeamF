@@ -1,5 +1,6 @@
+```jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.*" %>
+<%@ page import="java.sql.*, javax.naming.*, javax.sql.*, bean.Teacher" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -115,13 +116,36 @@
             PreparedStatement stmt = null;
             ResultSet rs = null;
             String error = null;
+            Teacher teacher = (Teacher) session.getAttribute("teacher");
 
-            try {
-                Class.forName("org.h2.Driver");
-                conn = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/exam", "sa", "");
-                String sql = "SELECT NO, NAME, ENT_YEAR, CLASS_NUM, IS_ATTEND, SCHOOL_CD FROM STUDENT ORDER BY CLASS_NUM, NO";
-                stmt = conn.prepareStatement(sql);
-                rs = stmt.executeQuery();
+            if (teacher == null) {
+                error = "ログインが必要です。";
+                request.setAttribute("error", error);
+                request.getRequestDispatcher("/scoremanager/login.jsp").forward(request, response);
+                return;
+            }
+
+            String schoolCd = teacher.getSchool() != null ? teacher.getSchool().getCd() : null;
+            String teacherName = teacher.getName();
+
+            if (schoolCd == null) {
+                error = "教師の学校情報が見つかりません。";
+            } else {
+        %>
+        <p class="text-center text-lg mb-4">ようこそ、<%= teacherName %>先生</p>
+        <%
+                try {
+                    // JNDIデータソースを取得
+                    Context initContext = new InitialContext();
+                    DataSource ds = (DataSource) initContext.lookup("java:comp/env/jdbc/exam");
+                    conn = ds.getConnection();
+
+                    // 対応するSCHOOL_CDの学生を取得
+                    String sql = "SELECT NO, NAME, ENT_YEAR, CLASS_NUM, IS_ATTEND, SCHOOL_CD " +
+                                 "FROM STUDENT WHERE SCHOOL_CD = ? ORDER BY CLASS_NUM, NO";
+                    stmt = conn.prepareStatement(sql);
+                    stmt.setString(1, schoolCd);
+                    rs = stmt.executeQuery();
         %>
         <table>
             <tr>
@@ -139,7 +163,7 @@
                     int entYear = rs.getInt("ENT_YEAR");
                     String classNum = rs.getString("CLASS_NUM");
                     boolean isAttend = rs.getBoolean("IS_ATTEND");
-                    String schoolCd = rs.getString("SCHOOL_CD");
+                    String studentSchoolCd = rs.getString("SCHOOL_CD");
             %>
             <tr>
                 <td><%= no %></td>
@@ -149,20 +173,25 @@
                 <td class="<%= isAttend ? "status-attend" : "status-absent" %>">
                     <%= isAttend ? "在籍" : "退学" %>
                 </td>
-                <td><%= schoolCd %></td>
+                <td><%= studentSchoolCd %></td>
             </tr>
             <% } %>
         </table>
         <%
-            } catch (ClassNotFoundException | SQLException e) {
-                error = "エラー: " + e.getMessage();
-            } finally {
-                if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
-                if (stmt != null) try { stmt.close(); } catch (SQLException ignored) {}
-                if (conn != null) try { conn.close(); } catch (SQLException ignored) {}
+                } catch (NamingException e) {
+                    error = "データベース接続設定エラー: " + e.getMessage();
+                } catch (SQLException e) {
+                    error = "データベースエラー: " + e.getMessage();
+                } finally {
+                    if (rs != null) try { rs.close(); } catch (SQLException ignored) {}
+                    if (stmt != null) try { stmt.close(); } catch (SQLException ignored) {}
+                    if (conn != null) try { conn.close(); } catch (SQLException ignored) {}
+                }
             }
         %>
+        <p><a href="<%=request.getContextPath()%>/scoremanager/main/menu.jsp">メニューに戻る</a></p>
         <p><a href="<%=request.getContextPath()%>/scoremanager/main/student_create.jsp">新規登録</a></p>
+        <p><a href="<%=request.getContextPath()%>/FrontController?action=logout">ログアウト</a></p>
         <% if (error != null) { %>
             <p class="error"><%= error %></p>
         <% } %>
