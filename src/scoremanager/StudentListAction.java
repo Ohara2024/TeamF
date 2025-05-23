@@ -13,8 +13,8 @@ public class StudentListAction implements Action {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        StudentDao studentDao = new StudentDao();
-        List<Student> students = studentDao.findAll();
+        StudentDao dao = new StudentDao();
+        List<Student> students = dao.findAll();
         request.setAttribute("students", students);
         request.getRequestDispatcher("/scoremanager/main/student_list.jsp").forward(request, response);
     }
