@@ -1,27 +1,21 @@
 package scoremanager;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import bean.Student;
 import dao.StudentDao;
+import tool.Action;
 
-public class StudentListAction extends HttpServlet {
+public class StudentListAction implements Action {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        try {
-            StudentDao studentDao = new StudentDao();
-            List<Student> students = studentDao.findAll();
-            req.setAttribute("students", students);
-            req.getRequestDispatcher("/scoremanager/main/student_list.jsp").forward(req, res);
-        } catch (Exception e) {
-            throw new ServletException(e);
-        }
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        StudentDao studentDao = new StudentDao();
+        List<Student> students = studentDao.findAll();
+        request.setAttribute("students", students);
+        request.getRequestDispatcher("/scoremanager/main/student_list.jsp").forward(request, response);
     }
 }
