@@ -131,7 +131,7 @@
                 <li><a href="/TeamF/scoremanager/main/student_list.jsp">学生管理</a></li>
                 <li><a href="">成績管理</a></li>
                 <li><a href="">成績登録</a></li>
-                <li><a href="/TeamF/scoremanager/main/student_update.jsp">成績参照</a></li>
+                <li><a href="">成績参照</a></li>
             </ul>
         </div>
         <div class="main-content">
