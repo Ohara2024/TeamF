@@ -10,13 +10,11 @@ import dao.StudentDao;
 import tool.Action;
 
 public class StudentListAction implements Action {
-
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        StudentDao dao = new StudentDao();
-        List<Student> students = dao.findAll();
-        request.setAttribute("students", students);
-        request.getRequestDispatcher("/WEB-INF/views/scoremanager/main/student_list.jsp").forward(request, response);
-
+    public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
+        StudentDao studentDao = new StudentDao();
+        List<Student> students = studentDao.findAll();
+        req.setAttribute("students", students);
+        req.getRequestDispatcher("/WEB-INF/views/studentList.jsp").forward(req, res);
     }
 }

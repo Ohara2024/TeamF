@@ -12,22 +12,29 @@ public class FrontController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
+        processRequest(req, res);
+    }
 
-        String actionName = request.getParameter("action");
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException {
+        processRequest(req, res);
+    }
 
+    private void processRequest(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException {
+        String actionName = req.getParameter("action");
         if (actionName == null || actionName.isEmpty()) {
-            actionName = "Default"; // 例: DefaultActionを使う
+            actionName = "Default"; // デフォルトアクション名
         }
 
-        // actionNameによってパッケージ名を変える例
+        // パッケージ名やActionクラス名を決める
         String className;
         if ("StudentList".equals(actionName)) {
-            // scoremanagerパッケージのアクションを呼び出す場合
             className = "scoremanager." + actionName + "Action";
         } else {
-            // デフォルトはscoremanager.mainパッケージのアクションを呼ぶ
             className = "scoremanager.main." + actionName + "Action";
         }
 
@@ -37,26 +44,16 @@ public class FrontController extends HttpServlet {
 
             if (actionInstance instanceof Action) {
                 Action action = (Action) actionInstance;
-                action.execute(request, response);
+                action.execute(req, res);
             } else {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        "Actionクラスが不正です");
+                res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Actionクラスが不正です");
             }
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_NOT_FOUND,
-                    "指定されたアクションが存在しません");
+            res.sendError(HttpServletResponse.SC_NOT_FOUND, "指定されたアクションが存在しません");
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    "内部エラーが発生しました");
+            res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "内部エラーが発生しました");
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doGet(request, response);
     }
 }
