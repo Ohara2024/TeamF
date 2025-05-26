@@ -12,18 +12,18 @@
         <servlet-class>tool.FrontController</servlet-class>
     </servlet>
 
-<servlet>
-    <servlet-name>StudentListServlet</servlet-name>
-    <servlet-class>scoremanager.StudentListServlet</servlet-class>
-</servlet>
+    <servlet>
+        <servlet-name>StudentListServlet</servlet-name>
+        <servlet-class>scoremanager.StudentListServlet</servlet-class>
+    </servlet>
 <servlet-mapping>
-    <servlet-name>StudentListServlet</servlet-name>
-    <url-pattern>/StudentListServlet</url-pattern>
+    <servlet-name>FrontController</servlet-name>
+    <url-pattern>/scoremanager/*</url-pattern>
 </servlet-mapping>
 
-    <!-- 必要なら文字コードフィルターや他の設定 -->
 
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
+
 </web-app>

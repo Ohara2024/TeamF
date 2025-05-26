@@ -16,6 +16,7 @@ public class StudentListAction implements Action {
         StudentDao dao = new StudentDao();
         List<Student> students = dao.findAll();
         request.setAttribute("students", students);
-        request.getRequestDispatcher("/scoremanager/main/student_list.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/scoremanager/main/student_list.jsp").forward(request, response);
+
     }
 }
