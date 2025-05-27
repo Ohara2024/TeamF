@@ -11,7 +11,7 @@ public class Dao {
     public Connection getConnection() throws Exception {
         if (ds == null) {
             InitialContext ic = new InitialContext();
-            String jndiName = "java:comp/env/jdbc/yajima"; // 修正
+            String jndiName = "java:comp/env/jdbc/exam"; // 修正
             System.out.println("Attempting to lookup: " + jndiName); // デバッグログ追加
             try {
                 ds = (DataSource) ic.lookup(jndiName);
