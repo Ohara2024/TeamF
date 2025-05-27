@@ -10,12 +10,12 @@ import dao.StudentDao;
 import tool.Action;
 
 public class StudentListAction implements Action {
+
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse res) throws Exception {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         StudentDao studentDao = new StudentDao();
         List<Student> students = studentDao.findAll();
-        System.out.println("Students: " + students); // デバッグ用ログ
-        req.setAttribute("students", students);
-        req.getRequestDispatcher("/scoremanager/main/student_list.jsp").forward(req, res);
+        request.setAttribute("students", students);
+        request.getRequestDispatcher("/scoremanager/main/student_list.jsp").forward(request, response);
     }
 }
