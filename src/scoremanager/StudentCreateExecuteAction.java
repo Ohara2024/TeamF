@@ -13,7 +13,7 @@ public class StudentCreateExecuteAction implements Action {
         String no = req.getParameter("no");
         String name = req.getParameter("name");
         int entYear = Integer.parseInt(req.getParameter("entYear"));
-        String classNum = req.getParameter("classNum");
+        String classNum = req.getParameter("classNum");z
         boolean isAttend = Boolean.parseBoolean(req.getParameter("isAttend"));
         String schoolCd = req.getParameter("schoolCd");
 
