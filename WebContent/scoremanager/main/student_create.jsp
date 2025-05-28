@@ -17,7 +17,7 @@
             min-height: 100vh;
             color: #333;
         }
-        .container {a
+        .container {
             background-color: #fff;
             padding: 30px;
             border-radius: 15px;

@@ -26,7 +26,7 @@
             max-width: 500px;
         }
         h1 {
-            color: #ff6b81;a
+            color: #ff6b81;
             font-size: 24px;
             margin-bottom: 20px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);

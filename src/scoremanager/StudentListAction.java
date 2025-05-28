@@ -19,4 +19,3 @@ public class StudentListAction implements Action {
         request.getRequestDispatcher("/scoremanager/main/student_list.jsp").forward(request, response);
     }
 }
-z

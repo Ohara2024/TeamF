@@ -33,7 +33,7 @@ public class FrontController extends HttpServlet {
         } else if ("menu".equals(action)) {
             new MenuAction().execute(req, resp);
         } else if ("logout".equals(action)) {
-            new LogOutAction().execute(req, resp);a
+            new LogOutAction().execute(req, resp);
         } else if ("executeLogin".equals(action)) {
             new LoginAction().execute(req, resp); // LoginActionを経由
         } else {
