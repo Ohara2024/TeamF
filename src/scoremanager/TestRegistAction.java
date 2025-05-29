@@ -1,4 +1,4 @@
-package main;
+package scoremanager;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -9,7 +9,6 @@ import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,19 +18,26 @@ import bean.Subject;
 import dao.ClassNumDao;
 import dao.StudentDao;
 import dao.SubjectDao;
+import tool.Action;
 
-public class TestRegistAction extends HttpServlet {
+public class TestRegistAction extends Action {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void execute(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             School school = (School) request.getSession().getAttribute("school");
 
             // --- プルダウン用リスト取得 ---
             StudentDao studentDao = new StudentDao();
-            Set<Integer> entYearSet = new LinkedHashSet<>(studentDao.getEntYearList(school)); // 年度
-            request.setAttribute("entYearSet", entYearSet);
+         // 全生徒リストを取得
+         List<Student> studentsAll = studentDao.filter(school,true);  // 全員分
+         Set<Integer> entYearSet = new LinkedHashSet<>();
+         for (Student student : studentsAll) {
+             entYearSet.add(student.getEntYear());
+         }
+         request.setAttribute("entYearSet", entYearSet);
+
 
             ClassNumDao classNumDao = new ClassNumDao();
             Set<String> classNumSet = new LinkedHashSet<>(classNumDao.filter(school)); // クラス
@@ -62,7 +68,7 @@ public class TestRegistAction extends HttpServlet {
                     && fSubjectCd != null && !fSubjectCd.isEmpty()
                     && fTestNo != null && !fTestNo.isEmpty()) {
                 // 生徒リスト取得
-                students = studentDao.filter( school,Integer.parseInt(fEntYear), fClassNum,school);
+                students = studentDao.filter(school, Integer.parseInt(fEntYear), fClassNum, true);
                 request.setAttribute("students", students);
 
                 // 科目取得
@@ -77,8 +83,6 @@ public class TestRegistAction extends HttpServlet {
                 // for (Test t : tests) {
                 //     pointsMap.put(t.getStudent().getNo(), t.getPoint());
                 // }
-                // 上記のようなロジックでpointsMapをセット
-                // 仮に空でもJSPでnullチェックできるように
                 request.setAttribute("pointsMap", pointsMap);
             }
 
@@ -96,12 +100,5 @@ public class TestRegistAction extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("/main/test_regist.jsp");
             rd.forward(request, response);
         }
-    }
-
-    // GETリクエストも同じ画面を表示したい場合はこちらもオーバーライド
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        doPost(request, response);
     }
 }
