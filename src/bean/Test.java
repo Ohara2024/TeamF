@@ -83,6 +83,11 @@ public class Test implements Serializable {
 		this.point = point;
 	}
 
+	public void setStudent(dao.Student student2) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
 
 
 }

@@ -3,57 +3,68 @@ package tool;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class FrontController extends HttpServlet {
+import scoremanager.StudentList_Action;
 
+@WebServlet("/front")
+public class FrontController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(req, res);
+
+        String command = request.getParameter("command");
+        if (command == null || command.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "commandパラメータが指定されていません");
+            return;
+        }
+
+        // commandで振り分け
+        if ("student_list".equals(command)) {
+            StudentList_Action action = new StudentList_Action();
+            try {
+                action.execute(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ServletException(e);
+            }
+        } else {
+            // 旧方式のactionパラメータでの呼び出しもサポート（任意）
+            String actionName = request.getParameter("action");
+            if (actionName != null && !actionName.isEmpty()) {
+                String className = "scoremanager." + actionName + "Action";
+                try {
+                    Class<?> clazz = Class.forName(className);
+                    Object actionInstance = clazz.getDeclaredConstructor().newInstance();
+
+                    if (actionInstance instanceof Action) {
+                        ((Action) actionInstance).execute(request, response);
+                        return;
+                    } else {
+                        response.sendError(500, "Actionクラスが不正です");
+                        return;
+                    }
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                    response.sendError(404, "指定されたアクションが存在しません");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    response.sendError(500, "内部エラーが発生しました");
+                }
+            } else {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND, "不明なコマンドです");
+            }
+        }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(req, res);
-    }
-
-    private void processRequest(HttpServletRequest req, HttpServletResponse res)
-            throws ServletException, IOException {
-        String actionName = req.getParameter("action");
-        if (actionName == null || actionName.isEmpty()) {
-            actionName = "Default"; // デフォルトアクション名
-        }
-
-        // パッケージ名やActionクラス名を決める
-        String className;
-        if ("StudentList".equals(actionName)) {
-            className = "scoremanager." + actionName + "Action";
-        } else {
-            className = "scoremanager.main." + actionName + "Action";
-        }
-
-        try {
-            Class<?> actionClass = Class.forName(className);
-            Object actionInstance = actionClass.getDeclaredConstructor().newInstance();
-
-            if (actionInstance instanceof Action) {
-                Action action = (Action) actionInstance;
-                action.execute(req, res);
-            } else {
-                res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Actionクラスが不正です");
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            res.sendError(HttpServletResponse.SC_NOT_FOUND, "指定されたアクションが存在しません");
-        } catch (Exception e) {
-            e.printStackTrace();
-            res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "内部エラーが発生しました");
-        }
+        doGet(request, response);
     }
 }

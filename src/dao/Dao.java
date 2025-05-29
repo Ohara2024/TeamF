@@ -1,31 +1,23 @@
 package dao;
 
 import java.sql.Connection;
-
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Dao {
-	/**
-	 * データソース:DataSource:クラスフィールド
-	 */
-	static DataSource ds;
+    private static final String URL = "jdbc:mysql://localhost:3306/your_db_name?useSSL=false&serverTimezone=UTC";
+    private static final String USER = "your_user";
+    private static final String PASSWORD = "your_password";
 
-	/**
-	 * getConnectionメソッド データベースへのコネクションを返す
-	 *
-	 * @return データベースへのコネクション:Connection
-	 * @throws Exception
-	 */
-	public Connection getConnection() throws Exception {
-		// データソースがnullの場合
-		if (ds == null) {
-			// InitialContextを初期化
-			InitialContext ic = new InitialContext();
-			// データベースへ接続
-			ds = (DataSource) ic.lookup("java:/comp/env/jdbc/exam");
-		}
-		// データベースへのコネクションを返却
-		return ds.getConnection();
-	}
+    static {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");  // MySQL 8以上のドライバクラス名
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASSWORD);
+    }
 }
