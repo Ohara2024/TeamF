@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF8" pageEncoding="UTF8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!-- ...省略（スタイルなど）... -->
+
 <body>
     <div class="main-wrapper">
         <div class="menu-bar">
@@ -70,7 +70,7 @@
 
             <c:if test="${not empty requestScope.students}">
                 <div class="results-section">
-                    <h2>成績入力: 
+                    <h2>成績入力:
                         <c:out value="${requestScope.searchedSubject.name}"/>
                         (第 <c:out value="${requestScope.searchedTestNo}"/> 回)
                     </h2>
