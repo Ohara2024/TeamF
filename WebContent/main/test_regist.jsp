@@ -1,126 +1,139 @@
-<%@ page language="java" contentType="text/html; charset=UTF8" pageEncoding="UTF8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--
+  このJSPファイルは、成績の検索および登録を行う一覧ページです。
+  入学年度・クラス・科目・回数を選択して成績を検索し、得点を入力して登録できます。
+--%>
 
-<body>
-    <div class="main-wrapper">
-        <div class="menu-bar">
-            <!-- ...メニュー省略... -->
+<%-- 共通レイアウト(base.jsp)を読み込む。以下でタイトルやメインコンテンツを差し込む --%>
+<c:import url="/common/base.jsp">
+
+  <%-- タイトル指定（共通レイアウトのタイトルに渡す） --%>
+  <c:param name="title">
+    得点管理システム
+  </c:param>
+
+  <%-- スクリプトの挿入エリア（今回は空） --%>
+  <c:param name="scripts"></c:param>
+
+  <%-- メインのコンテンツエリア --%>
+  <c:param name="content">
+    <section>
+
+      <%-- ページ見出し --%>
+      <h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">成績管理</h2>
+
+      <%-- フィルター（検索条件）フォーム --%>
+      <form method="get">
+        <div class="row border mx-3 mb-3 py-2 align-items-center rounded" id="filter">
+
+          <%-- ▼ 入学年度の選択肢 ▼ --%>
+          <div class="col-2">
+            <label class="form-label" for="student-f1-select">入学年度</label>
+            <select class="form-select" id="student-f1-select" name="f1">
+              <option value="0">--------</option>
+              <c:forEach var="year" items="${entYearList}">
+                <option value="${year}" <c:if test="${year == f1}">selected</c:if>>${year}</option>
+              </c:forEach>
+            </select>
+          </div>
+
+          <%-- ▼ クラスの選択肢 ▼ --%>
+          <div class="col-2">
+            <label class="form-label" for="student-f2-select">クラス</label>
+            <select class="form-select" id="student-f2-select" name="f2">
+              <option value="0">--------</option>
+              <c:forEach var="num" items="${cNumList}">
+                <option value="${num}" <c:if test="${num == f2}">selected</c:if>>${num}</option>
+              </c:forEach>
+            </select>
+          </div>
+
+          <%-- ▼ 科目の選択肢 ▼ --%>
+          <div class="col-4">
+            <label class="form-label" for="student-f2-select">科目</label>
+            <select class="form-select" id="student-f2-select" name="f3">
+              <option value="0">--------</option>
+              <c:forEach var="subject" items="${list}">
+                <option value="${subject.cd}" <c:if test="${subject.cd == f3}">selected</c:if>>${subject.name}</option>
+              </c:forEach>
+            </select>
+          </div>
+
+          <%-- ▼ 回数の選択肢（1回目のテスト、2回目など） ▼ --%>
+          <div class="col-2">
+            <label class="form-label" for="student-f2-select">回数</label>
+            <select class="form-select" id="student-f2-select" name="f4">
+              <option value="0">--------</option>
+              <c:forEach var="num" items="${countList}">
+                <option value="${num}" <c:if test="${num == f4}">selected</c:if>>${num}</option>
+              </c:forEach>
+            </select>
+          </div>
+
+          <%-- 検索ボタン --%>
+          <div class="col-2 text-center">
+            <button class="btn btn-secondary" id="filter-button">検索</button>
+          </div>
+
+          <%-- 入力エラー表示（例：項目未選択など） --%>
+          <div class="mt-2 text-warning">${errors.get("a")}</div>
         </div>
-        <div class="content-area">
-            <div class="header">
-                <h1>成績登録・変更</h1>
-                <span class="user-info">
-                    <c:if test="${not empty sessionScope.teacher}">${sessionScope.teacher.name}さん</c:if>
-                    <c:if test="${empty sessionScope.teacher}">ゲストさん</c:if>
-                    <a href="${pageContext.request.contextPath}/login/logout" class="logout-link">ログアウト</a>
-                </span>
+      </form>
+
+      <%-- 成績登録用フォーム（検索結果表示後、得点入力 → 登録用） --%>
+      <form action="TestRegistExecute.action" method="get">
+
+        <%-- 検索結果が存在する場合にテーブルを表示 --%>
+        <c:choose>
+          <c:when test="${testlist.size() > 0}">
+
+            <%-- 検索された科目名と回数を表示 --%>
+            <div>科目：${subject_name}（${f4}回）</div>
+
+            <%-- ▼ 成績一覧表 ▼ --%>
+            <table class="table table-hover">
+              <tr>
+                <th>入学年度</th>
+                <th>クラス</th>
+                <th>学生番号</th>
+                <th>氏名</th>
+                <th>点数</th>
+              </tr>
+
+              <%-- 受講生1人ずつ行を作成 --%>
+              <c:forEach var="test" items="${testlist}" varStatus="st">
+                <tr>
+                  <td>${test.student.entYear}</td>
+                  <td>${test.classNum}</td>
+                  <td>${test.student.no}</td>
+                  <td>${test.student.name}</td>
+
+                  <%-- 点数入力欄。すでに得点がある場合はvalue属性に表示 --%>
+                  <td>
+                    <input type="text" name="point_${test.student.no}"
+                      <c:if test="${test.no != 0}">value="${test.point}"</c:if> value="">
+                    <div class="mt-2 text-warning">${errors.get(st.count)}</div>
+                  </td>
+                </tr>
+
+                <%-- 学生ごとのhiddenフィールド（識別用） --%>
+                <input type="hidden" name="regist" value="${test.student.no}">
+              </c:forEach>
+            </table>
+
+            <%-- 科目コードと回数をhiddenで送信（保存時に必要） --%>
+            <input type="hidden" name="count" value="${f4}">
+            <input type="hidden" name="subject" value="${f3}">
+
+            <%-- 成績を登録して終了するボタン --%>
+            <div class="col-2 text-center">
+              <button class="btn btn-secondary" id="filter-button">登録して終了</button>
             </div>
 
-            <c:if test="${not empty requestScope.errorMessage}">
-                <p class="error-message"><c:out value="${requestScope.errorMessage}"/></p>
-            </c:if>
-            <c:if test="${not empty requestScope.infoMessage && empty requestScope.errorMessage}">
-                <p class="info-message"><c:out value="${requestScope.infoMessage}"/></p>
-            </c:if>
-
-            <div class="search-section">
-                <h2>検索条件</h2>
-                <form id="searchForm" action="${pageContext.request.contextPath}/main/TestRegist.action" method="post">
-                    <input type="hidden" name="action" value="search_students_for_score">
-                    <div class="form-group">
-                        <label for="fEntYear">入学年度:</label>
-                        <select id="fEntYear" name="fEntYear">
-                            <option value="">選択してください</option>
-                            <c:forEach var="year" items="${requestScope.entYearSet}">
-                                <option value="${year}" <c:if test="${year == requestScope.fEntYear}">selected</c:if>>${year}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="fClassNum">クラス:</label>
-                        <select id="fClassNum" name="fClassNum">
-                            <option value="">選択してください</option>
-                            <c:forEach var="classVal" items="${requestScope.classNumSet}">
-                                <option value="${classVal}" <c:if test="${classVal == requestScope.fClassNum}">selected</c:if>>${classVal}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="fSubjectCd">科目:</label>
-                        <select id="fSubjectCd" name="fSubjectCd">
-                            <option value="">選択してください</option>
-                            <c:forEach var="subject" items="${requestScope.subjectList}">
-                                <option value="${subject.cd}" <c:if test="${subject.cd == requestScope.fSubjectCd}">selected</c:if>>${subject.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="fTestNo">回数:</label>
-                        <select id="fTestNo" name="fTestNo">
-                            <option value="">選択してください</option>
-                            <option value="1" <c:if test="${'1' == requestScope.fTestNo}">selected</c:if>>1</option>
-                            <option value="2" <c:if test="${'2' == requestScope.fTestNo}">selected</c:if>>2</option>
-                        </select>
-                    </div>
-                    <div class="button-group">
-                        <button type="submit">検索</button>
-                    </div>
-                </form>
-            </div>
-
-            <c:if test="${not empty requestScope.students}">
-                <div class="results-section">
-                    <h2>成績入力:
-                        <c:out value="${requestScope.searchedSubject.name}"/>
-                        (第 <c:out value="${requestScope.searchedTestNo}"/> 回)
-                    </h2>
-                    <form id="scoreForm" action="${pageContext.request.contextPath}/main/TestRegist.action" method="post">
-                        <input type="hidden" name="action" value="register_scores">
-                        <input type="hidden" name="hidden_fEntYear" value="${requestScope.fEntYear}">
-                        <input type="hidden" name="hidden_fClassNum" value="${requestScope.fClassNum}">
-                        <input type="hidden" name="hidden_fSubjectCd" value="${requestScope.fSubjectCd}">
-                        <input type="hidden" name="hidden_fTestNo" value="${requestScope.searchedTestNo}">
-
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>学生番号</th>
-                                    <th>氏名</th>
-                                    <th>点数 (0-100)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="student" items="${requestScope.students}">
-                                    <tr>
-                                        <td><c:out value="${student.no}"/></td>
-                                        <td><c:out value="${student.name}"/></td>
-                                        <td>
-                                            <input type="number" name="point_${student.no}" min="0" max="100"
-                                                   value="${requestScope.pointsMap[student.no]}" placeholder="点数">
-                                            <input type="hidden" name="studentNos" value="${student.no}">
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-            </c:if>
-            <c:if test="${empty requestScope.students && not empty requestScope.fEntYear && not empty requestScope.fClassNum && not empty requestScope.fSubjectCd && not empty requestScope.fTestNo && empty requestScope.errorMessage && empty requestScope.infoMessage}">
-                 <p class="info-message">指定された条件に合致する学生情報は見つかりませんでした。検索条件を変更して再度お試しください。</p>
-            </c:if>
-        </div>
-    </div>
-
-    <c:if test="${not empty requestScope.students}">
-        <div class="fixed-action-button-container">
-            <button type="button" onclick="document.getElementById('scoreForm').submit();">登録/更新</button>
-        </div>
-    </c:if>
-
-    <div class="footer">
-        © <%= java.time.Year.now().getValue() %> TIC<br>
-        大原学園
-    </div>
-</body>
-</html>
+          </c:when>
+        </c:choose>
+      </form>
+    </section>
+  </c:param>
+</c:import>

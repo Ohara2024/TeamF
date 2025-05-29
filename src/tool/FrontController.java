@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import scoremanager.LogOutAction;
 import scoremanager.LoginAction;
 import scoremanager.MenuAction;
-import scoremanager.TestRegistAction;
+import scoremanager.main.TestRegistAction;
 
 @WebServlet("/FrontController")
 public class FrontController extends HttpServlet {
