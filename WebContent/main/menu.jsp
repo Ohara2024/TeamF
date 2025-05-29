@@ -1,104 +1,62 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>メニュー</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            display: flex;
-            height: 100vh;
-        }
-        .sidebar {
-            width: 200px;
-            background-color: #fff;
-            padding: 20px;
-            border-right: 1px solid #ccc;
-        }
-        .sidebar ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .sidebar ul li {
-            margin-bottom: 10px;
-        }
-        .sidebar ul li a {
-            text-decoration: none;
-            color: #007bff;
-            display: block;
-            padding: 10px;
-            background-color: #f8d7da;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .sidebar ul li a:hover {
-            background-color: #f1aeb5;
-        }
-        .main-content {
-            flex-grow: 1;
-            padding: 20px;
-            text-align: center;
-        }
-        .card {
-            display: inline-block;
-            width: 200px;
-            padding: 20px;
-            margin: 10px;
-            background-color: #d1e7dd;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .card.logout {
-            background-color: #cce5ff;
-        }
-        .card.logout input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .card.logout input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
-        .footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #e9ecef;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-    <div class="sidebar">
-        <ul>
-            <li><a href="#">メニュー</a></li>
-            <li><a href="#">学生管理</a></li>
-            <li><a href="#">成績管理</a></li>
-            <li><a href="<%= request.getContextPath() %>/TestRegist.action">成績登録</a></li>
-            <li><a href="#">成績参照</a></li>
-        </ul>
-    </div>
-    <div class="main-content">
-        <h2>メニュー</h2>
-        <p>ようこそ、<%= session.getAttribute("teacherName") %> さん！</p>
-        <div class="card logout">
-            <form action="Logout.action" method="post">
-    <input type="submit" value="ログアウト">
-</form>
-        </div>
-    </div>
-    <div class="footer">
-        © 2023 TIC 大原学園
-    </div>
-</body>
-</html>
+<%-- メニュー画面のJSPファイル --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:import url="/common/base.jsp">
+	<%-- base.jspにパラメータを渡して共通レイアウトを利用 --%>
+
+	<c:param name="title">
+		得点管理システム
+		<%-- ページタイトルとして「得点管理システム」を指定 --%>
+	</c:param>
+
+	<c:param name="scripts"></c:param>
+		<%-- scriptsパラメータは空。追加のJavaScriptをここで指定可能 --%>
+
+	<c:param name="content">
+		<%-- ページのメインコンテンツ部分 --%>
+		<section class="me-4">
+			<h2 class="h3 mb-3 fw-norma bg-secondary bg-opacity-10 py-2 px-4">メニュー</h2>
+			<%-- メニュー見出し --%>
+
+			<div class="row text-center px-4 fs-3 my-5">
+				<%-- Bootstrapのグリッドを使って横並びのメニューを作成 --%>
+
+				<div class="col d-flex align-items-center justify-content-center mx-2 rounded shadow"
+					style="height: 10rem; background-color: #dbb;">
+					<%-- 学生管理のリンク。背景色は薄いピンク系 --%>
+					<a href="StudentList.action">学生管理</a>
+				</div>
+
+				<div class="col d-flex align-items-center justify-content-center mx-2 rounded shadow"
+					style="height: 10rem; background-color: #bdb;">
+					<%-- 成績管理の枠。背景色は薄い緑系 --%>
+					<div>
+						<div class="">成績管理</div>
+						<div class="">
+							<a href="TestRegist.action">成績登録</a>
+							<%-- 成績登録画面へのリンク --%>
+						</div>
+						<div class="">
+							<a href="TestList.action">成績参照</a>
+							<%-- 成績参照画面へのリンク --%>
+						</div>
+					</div>
+				</div>
+
+				<div class="col d-flex align-items-center justify-content-center mx-2 rounded shadow"
+					style="height: 10rem; background-color: #bbd;">
+					<%-- 科目管理のリンク。背景色は薄い青系 --%>
+					<a href="SubjectList.action">科目管理</a>
+				</div>
+
+				<div class="col d-flex align-items-center justify-content-center mx-2 rounded shadow"
+					style="height: 10rem; background-color: #ddb;">
+					<%-- クラス管理のリンク。背景色は薄いオレンジ系 --%>
+					<a href="ClassList.action">クラス管理</a>
+				</div>
+			</div>
+		</section>
+	</c:param>
+</c:import>
