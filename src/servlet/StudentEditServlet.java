@@ -1,7 +1,7 @@
 package servlet;
 
 import java.io.IOException;
-import java.sql.Connection;
+import java.sql.Connection;  // ← ここを修正
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,6 +26,8 @@ public class StudentEditServlet extends HttpServlet {
         }
 
         int id = Integer.parseInt(idStr);
+        System.out.println("編集画面にアクセスした学生ID: " + id); // ログ出力
+
         String url = "jdbc:mysql://localhost:3306/your_db?serverTimezone=UTC";
         String user = "root";
         String password = "password123";
@@ -51,6 +53,7 @@ public class StudentEditServlet extends HttpServlet {
         }
 
         if(s == null) {
+            request.getSession().setAttribute("errorMessage", "指定された学生が存在しません。");
             response.sendRedirect(request.getContextPath() + "/student/list");
             return;
         }

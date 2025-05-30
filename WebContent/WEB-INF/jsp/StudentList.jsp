@@ -53,9 +53,6 @@
         tr:nth-child(even) {
             background-color: #fff0f5;
         }
-        <tr>
-
-
         tr:nth-child(odd) {
             background-color: #ffffff;
         }
@@ -79,12 +76,11 @@
         }
         a {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 6px 12px;
             background-color: #81d4fa;
             color: #fff;
             text-decoration: none;
             border-radius: 5px;
-            margin-top: 20px;
             font-size: 14px;
             transition: background-color 0.3s, transform 0.2s;
         }
@@ -134,6 +130,7 @@
                 <th>クラス</th>
                 <th>在籍状況</th>
                 <th>学校コード</th>
+                <th>操作</th> <!-- 追加 -->
             </tr>
             <%
                 while (rs.next()) {
@@ -153,6 +150,9 @@
                     <%= isAttend ? "在籍" : "退学" %>
                 </td>
                 <td><%= schoolCd %></td>
+                <td>
+                    <a href="<%= request.getContextPath() %>/student/edit?id=<%= no %>">編集</a>
+                </td>
             </tr>
             <% } %>
         </table>
