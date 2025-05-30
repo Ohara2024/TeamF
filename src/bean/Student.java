@@ -1,65 +1,106 @@
 package bean;
 
 public class Student {
-    private int id; // ← 追加
-    private String name;
-    private int age; // ← 追加
-    private String department; // ← 追加
 
-    private String no;
-    private int score;
-    private int entYear;
-    private String classNum;
-    private boolean attend;
-    private String schoolCd;
-    private int id1;  // ← フィールド追加
+    private int id;              // 学生ID
+    private String no;           // 学籍番号
+    private String name;         // 氏名
+    private int age;             // 年齢
+    private int score;           // 成績
+    private int entYear;         // 入学年度
+    private String classNum;     // クラス
+    private boolean attend;      // 在学中フラグ
+    private String department;   // 学科
+    private String schoolCd;     // 学校コード
+    private School school;       // 学校情報（リレーション）
 
-    public int getId1() {
+    // --- getter / setter ---
+
+    public int getId() {
         return id;
     }
 
-    public void setId1(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
+    public String getNo() {
+        return no;
+    }
 
-    // ★ 追加: id, age, department の getter/setter
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public void setNo(String no) {
+        this.no = no;
+    }
 
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
+    public String getName() {
+        return name;
+    }
 
-    public String getDepartment() { return department; }
-    public void setDepartment(String department) { this.department = department; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    // --- 既存の getter/setter ---
-    public String getNo() { return no; }
-    public void setNo(String no) { this.no = no; }
+    public int getAge() {
+        return age;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setAge(int age) {
+        this.age = age;
+    }
 
-    public int getScore() { return score; }
-    public void setScore(int score) { this.score = score; }
+    public int getScore() {
+        return score;
+    }
 
-    public int getEntYear() { return entYear; }
-    public void setEntYear(int entYear) { this.entYear = entYear; }
+    public void setScore(int score) {
+        this.score = score;
+    }
 
-    public String getClassNum() { return classNum; }
-    public void setClassNum(String classNum) { this.classNum = classNum; }
+    public int getEntYear() {
+        return entYear;
+    }
 
-    public boolean isAttend() { return attend; }
-    public void setAttend(boolean attend) { this.attend = attend; }
+    public void setEntYear(int entYear) {
+        this.entYear = entYear;
+    }
 
-    public String getSchoolCd() { return schoolCd; }
-    public void setSchoolCd(String schoolCd) { this.schoolCd = schoolCd; }
+    public String getClassNum() {
+        return classNum;
+    }
+
+    public void setClassNum(String classNum) {
+        this.classNum = classNum;
+    }
+
+    public boolean isAttend() {
+        return attend;
+    }
+
+    public void setAttend(boolean attend) {
+        this.attend = attend;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getSchoolCd() {
+        return schoolCd;
+    }
+
+    public void setSchoolCd(String schoolCd) {
+        this.schoolCd = schoolCd;
+    }
 
     public School getSchool() {
-        return null; // 必要に応じて実装
+        return school;
     }
 
     public void setSchool(School school) {
-        // 必要に応じて実装
+        this.school = school;
     }
 }
