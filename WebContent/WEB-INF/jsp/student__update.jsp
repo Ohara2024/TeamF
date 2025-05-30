@@ -65,5 +65,20 @@
         }
     }
 %>
+<table border="1">
+  <tr>
+    <th>ID</th><th>名前</th><th>操作</th>
+  </tr>
+  <c:forEach var="student" items="${studentList}">
+    <tr>
+      <td>${student.id}</td>
+      <td>${student.name}</td>
+      <td>
+        <a href="${pageContext.request.contextPath}/student/edit?id=${student.id}">編集</a>
+      </td>
+    </tr>
+  </c:forEach>
+</table>
+
 </body>
 </html>
