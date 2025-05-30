@@ -45,8 +45,8 @@
 <div class="side-menu-container">
   <div class="side-menu">
     <ul class="menu-main">
-      <li><a href="/TeamF/main/menu.jsp">メニュー</a></li>
-      <li><a href="">学生管理</a></li>
+      <li><a href="/TeamF/scoremanager/main/menu.jsp">メニュー</a></li>
+      <li><a href="/TeamF/scoremanager/main/student_list.jsp">学生管理</a></li>
       <li>
         <a href="#">成績管理</a>
         <ul class="menu-sub">
