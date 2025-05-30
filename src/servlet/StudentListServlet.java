@@ -12,25 +12,27 @@ import javax.servlet.http.HttpServletResponse;
 import bean.Student;
 import dao.StudentDao;
 
-@WebServlet("/student/list")
+@WebServlet("/student-list")
 public class StudentListServlet extends HttpServlet {
-
-    private StudentDao dao;
-
-    @Override
-    public void init() throws ServletException {
-        dao = new StudentDao(); // DAOインスタンス作成
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        throws ServletException, IOException {
 
-        List<Student> studentList = dao.findAll(); // DAOから学生一覧を取得
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
 
-        request.setAttribute("students", studentList); // JSPにデータを渡す
+        try {
+            StudentDao dao = new StudentDao();
+            List<Student> studentList = dao.findAll();
 
-        request.getRequestDispatcher("/WEB-INF/jsp/student_list.jsp") // JSPファイルへフォワード
-               .forward(request, response);
+            request.setAttribute("studentList", studentList);
+
+            // JSPファイル名の大文字小文字を正しく
+            request.getRequestDispatcher("/WEB-INF/jsp/StudentList.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServletException("データ取得エラー", e);
+        }
     }
 }
