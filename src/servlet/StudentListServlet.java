@@ -12,12 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import bean.Student;
 import dao.StudentDao;
 
-@WebServlet("/student-list")
+@WebServlet("/student/list")
 public class StudentListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
+        // 文字コード指定
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
 
@@ -25,9 +26,10 @@ public class StudentListServlet extends HttpServlet {
             StudentDao dao = new StudentDao();
             List<Student> studentList = dao.findAll();
 
+            // JSPにリストを渡す
             request.setAttribute("studentList", studentList);
 
-            // JSPファイル名の大文字小文字を正しく
+            // StudentList.jspにフォワード
             request.getRequestDispatcher("/WEB-INF/jsp/StudentList.jsp").forward(request, response);
 
         } catch (Exception e) {

@@ -1,94 +1,69 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-
-<%@ page import="bean.Student" %>
-
-
-<!DOCTYPE html>
+<%@ page import="java.sql.*" %>
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>学生情報編集</title>
-    <style>
-        form {
-            width: 400px;
-            margin: 40px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fefefe;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-        input[type="text"], input[type="number"] {
-            width: 100%;
-            padding: 6px 8px;
-            margin-top: 4px;
-            box-sizing: border-box;
-        }
-        input[type="submit"] {
-            margin-top: 20px;
-            padding: 8px 15px;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        input[type="submit"]:hover {
-            background-color: #c0392b;
-        }
-        a {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #3498db;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        h2 {
-            text-align: center;
-            color: #e74c3c;
-            margin-top: 40px;
-        }
-    </style>
+    <title>学生情報の編集</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-<h2>学生情報編集</h2>
-
+<h2>学生情報の編集</h2>
 <%
-    Student s = (Student)request.getAttribute("student");
-    if (s == null) {
+    String idStr = request.getParameter("id");
+    if (idStr == null || idStr.isEmpty()) {
 %>
-<p style="text-align:center; color:red;">学生情報が見つかりません。</p>
+    <p>学生IDが指定されていません。</p>
 <%
     } else {
+        int id = 0;
+        try {
+            id = Integer.parseInt(idStr);
+        } catch (NumberFormatException e) {
 %>
-
-<form action="<%=request.getContextPath()%>/student/update" method="post">
-  <td><%= s.getId() %></td>
-    <label for="name">名前:</label>
-    <input type="text" id="name" name="name" value="<%= s.getName() %>" required>
-
-    <label for="age">年齢:</label>
-    <input type="number" id="age" name="age" value="<%= s.getAge() %>" required min="0">
-
-    <label for="department">学科:</label>
-    <input type="text" id="department" name="department" value="<%= s.getDepartment() %>" required>
-
-    <input type="submit" value="更新">
-</form>
-
-<p><a href="<%=request.getContextPath()%>/student/list">一覧に戻る</a></p>
-
+    <p>無効な学生IDです。</p>
 <%
+        }
+
+        String url = "jdbc:mysql://localhost:3306/your_db?serverTimezone=UTC";
+        String user = "root";
+        String password = "password123";
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(url, user, password);
+            pstmt = conn.prepareStatement("SELECT * FROM students WHERE id = ?");
+            pstmt.setInt(1, id);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+%>
+    <form action="student_update_done.jsp" method="post">
+        <input type="hidden" name="id" value="<%= id %>">
+        名前: <input type="text" name="name" value="<%= rs.getString("name") %>"><br>
+        年齢: <input type="text" name="age" value="<%= rs.getInt("age") %>"><br>
+        学科: <input type="text" name="department" value="<%= rs.getString("department") %>"><br>
+        <input type="submit" value="更新">
+    </form>
+<%
+            } else {
+%>
+    <p>該当する学生が見つかりませんでした。</p>
+<%
+            }
+        } catch(Exception e) {
+%>
+    <p>データベース接続エラー: <%= e.getMessage() %></p>
+<%
+        } finally {
+            try { if(rs != null) rs.close(); } catch(Exception e) {}
+            try { if(pstmt != null) pstmt.close(); } catch(Exception e) {}
+            try { if(conn != null) conn.close(); } catch(Exception e) {}
+        }
     }
 %>
-
 </body>
 </html>
