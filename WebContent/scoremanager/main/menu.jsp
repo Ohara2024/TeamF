@@ -83,7 +83,7 @@
         <ul>
             <li><a href="#">メニュー</a></li>
             <li><a href="/TeamF/scoremanager/main/student_list.jsp">学生管理</a></li>
-            <li><a href="#">科目管理</a></li>
+            <li><a href="/TeamF/scoremanagermain/subject_create.jsp">科目管理</a></li>
             <li><a href="#">成績登録</a></li>
             <li><a href="/TeamF/testmanager/list">成績参照</a></li>
         </ul>
