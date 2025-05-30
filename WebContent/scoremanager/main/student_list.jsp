@@ -75,20 +75,25 @@
             text-align: center;
             margin-top: 20px;
         }
-        a {
+        a, input[type="submit"] {
             display: inline-block;
             padding: 10px 20px;
             background-color: #81d4fa;
             color: #fff;
             text-decoration: none;
+            border: none;
             border-radius: 5px;
             margin-top: 20px;
             font-size: 14px;
+            cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
         }
-        a:hover {
+        a:hover, input[type="submit"]:hover {
             background-color: #4fc3f7;
             transform: scale(1.05);
+        }
+        form {
+            display: inline;
         }
         @media (max-width: 600px) {
             .container {
@@ -100,7 +105,7 @@
             th, td {
                 padding: 8px;
             }
-            a {
+            a, input[type="submit"] {
                 width: 100%;
                 text-align: center;
             }
@@ -155,6 +160,7 @@
                 <th>クラス</th>
                 <th>在籍状況</th>
                 <th>学校コード</th>
+                <th>操作</th>
             </tr>
             <%
                 while (rs.next()) {
@@ -174,6 +180,12 @@
                     <%= isAttend ? "在籍" : "退学" %>
                 </td>
                 <td><%= studentSchoolCd %></td>
+                <td>
+                    <form action="<%=request.getContextPath()%>/scoremanager/main/student_update.jsp" method="get">
+                        <input type="hidden" name="no" value="<%= no %>">
+                        <input type="submit" value="編集">
+                    </form>
+                </td>
             </tr>
             <% } %>
         </table>
