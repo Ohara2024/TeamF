@@ -75,25 +75,26 @@
             text-align: center;
             margin-top: 20px;
         }
-        a, input[type="submit"] {
+        a {
             display: inline-block;
             padding: 10px 20px;
             background-color: #81d4fa;
             color: #fff;
             text-decoration: none;
-            border: none;
             border-radius: 5px;
             margin-top: 20px;
             font-size: 14px;
-            cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
         }
-        a:hover, input[type="submit"]:hover {
+        a:hover {
             background-color: #4fc3f7;
             transform: scale(1.05);
         }
-        form {
-            display: inline;
+        a.button {
+            background-color: #d1c4e9;
+        }
+        a.button:hover {
+            background-color: #ffb6c1;
         }
         @media (max-width: 600px) {
             .container {
@@ -105,7 +106,7 @@
             th, td {
                 padding: 8px;
             }
-            a, input[type="submit"] {
+            a {
                 width: 100%;
                 text-align: center;
             }
@@ -160,7 +161,6 @@
                 <th>クラス</th>
                 <th>在籍状況</th>
                 <th>学校コード</th>
-                <th>操作</th>
             </tr>
             <%
                 while (rs.next()) {
@@ -180,12 +180,6 @@
                     <%= isAttend ? "在籍" : "退学" %>
                 </td>
                 <td><%= studentSchoolCd %></td>
-                <td>
-                    <form action="<%=request.getContextPath()%>/scoremanager/main/student_update.jsp" method="get">
-                        <input type="hidden" name="no" value="<%= no %>">
-                        <input type="submit" value="編集">
-                    </form>
-                </td>
             </tr>
             <% } %>
         </table>
@@ -203,6 +197,7 @@
         %>
         <p><a href="<%=request.getContextPath()%>/scoremanager/main/menu.jsp">メニューに戻る</a></p>
         <p><a href="<%=request.getContextPath()%>/scoremanager/main/student_create.jsp">新規登録</a></p>
+        <p><a href="<%=request.getContextPath()%>/scoremanager/main/student_update.jsp" class="button">学生情報変更</a></p>
         <p><a href="<%=request.getContextPath()%>/FrontController?action=logout">ログアウト</a></p>
         <% if (error != null) { %>
             <p class="error"><%= error %></p>
