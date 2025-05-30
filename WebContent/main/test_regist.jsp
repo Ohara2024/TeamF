@@ -1,14 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  このJSPファイルは、成績の検索および登録を行う一覧ページです。
-  入学年度・クラス・科目・回数を選択して成績を検索し、得点を入力して登録できます。
---%>
 
-<%-- 共通レイアウト(base.jsp)を読み込む。以下でタイトルやメインコンテンツを差し込む --%>
 <c:import url="/common/base.jsp">
 
-  <%-- タイトル指定（共通レイアウトのタイトルに渡す） --%>
   <c:param name="title">
     得点管理システム
   </c:param>

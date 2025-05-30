@@ -7,7 +7,7 @@
 </div>
 <c:if test="${user.isAuthenticated()}">
 	<div class="nav align-self-end">
-		<span class="nav-item px-2">${user.getName()}様</span>
+		<span class="nav-item px-2"><%= session.getAttribute("teacherName") %>様</span>
 		<a class="nav-item px-2" href="Logout.action">ログアウト</a>
 	</div>
 </c:if>

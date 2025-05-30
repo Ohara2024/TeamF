@@ -26,20 +26,13 @@ public class TestRegistAction extends Action {
 
         // セッションの取得（ログインしている教員情報を取得するため）
         HttpSession session = req.getSession();
-        Teacher teacher = (Teacher) session.getAttribute("user");
+        Teacher teacher = (Teacher) session.getAttribute("teacher");
+        School school = (School) session.getAttribute("school");
 
         // ログインしていなければlogin画面へリダイレクト
-        if (teacher == null) {
+        if (teacher == null || school == null) {
             res.sendRedirect("login.jsp");
             return;
-        }
-
-        // 教員が所属する学校情報を取得
-        School teacherSchool = teacher.getSchool();
-        if (teacherSchool == null) {
-        	Map<String, String> errors = new HashMap<>();
-        	errors.put("school", "学校情報が取得できません");
-        	req.setAttribute("errors", errors);
         }
 
         // 入力値や内部処理用の変数定義
@@ -62,9 +55,10 @@ public class TestRegistAction extends Action {
         TestDao testDao = new TestDao();
 
         // DBから現在の学校に属するクラス・科目情報を取得
-        List<String> cNumlist = cNumDao.filter(teacherSchool);
+        // クラス図通りschoolを渡す
+        List<String> cNumlist = cNumDao.filter(school);
         if (cNumlist == null) cNumlist = new ArrayList<>();
-        List<Subject> list = subjectDao.filter(teacherSchool);
+        List<Subject> list = subjectDao.filter(school);
         if (list == null) list = new ArrayList<>();
 
         // 入力された文字列から数値に変換（未入力の場合はスキップ）
@@ -105,9 +99,10 @@ public class TestRegistAction extends Action {
 
         // 検索処理
         if (doSearch) {
-            Subject selectedSubject = subjectDao.get(subject, teacherSchool);
+            // 必ずschoolを渡す
+            Subject selectedSubject = subjectDao.get(subject, school);
             if (selectedSubject != null) {
-                List<Test> testlist = testDao.filter(entYear, classNum, selectedSubject, count, teacherSchool);
+                List<Test> testlist = testDao.filter(entYear, classNum, selectedSubject, count, school);
                 req.setAttribute("testlist", testlist);
                 req.setAttribute("subject_name", selectedSubject.getName());
             } else {
